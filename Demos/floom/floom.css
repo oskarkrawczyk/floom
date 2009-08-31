@@ -1,0 +1,7 @@
+#blinds-cont { -webkit-box-shadow: 0 0 40px #000; background: url(bg.png) 0 0 no-repeat; margin: 50px auto; padding: 20px 0 0 0; font-family: 'Georgia', 'Arial Narrow', 'Arial', sans-serif; height: 410px; -moz-box-shadow: 0 0 40px #000; width: 1000px; }
+#blinds-cont #blinds { margin: 0 auto; background: url(spinner.gif) 50% no-repeat; height: 330px; width: 960px; }
+#blinds-cont #blinds .floom_slice { z-index: 10; }
+#blinds-cont #blinds .floom_caption { text-shadow: 0 1px 0 #fff; font-size: 1.0em; color: #333; font-style: italic; position: relative; text-align: center; width: 100%; top: 25px; }
+#blinds-cont #blinds .floom_progressbar { font-size: 1px; background: #131718; border-bottom: solid 1px #fff; height: 3px; position: relative; z-index: 1000; width: 0; top: 2px; }
+#blinds-cont #blinds .floom_container { overflow: hidden; border-bottom: solid 1px #fff; border-top: solid 1px #666; }
+#blinds-cont #blinds .floom_vertical { float: left; }

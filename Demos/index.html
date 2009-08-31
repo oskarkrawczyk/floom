@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+	<script type="text/javascript" charset="utf-8" src="mootools-1.2.2-core.js"></script>
+	<script type="text/javascript" charset="utf-8" src="mootools-1.2.2.2-more.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../Source/floom-1.0.js"></script>
+	
+	<script type="text/javascript" charset="utf-8">
+		window.addEvent('domready', function(e) {	
+			
+			// option 1		
+			var slides = [
+				{
+					image: 'nature-photo0.jpg',
+					caption: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit'
+				},
+				{
+					image: 'nature-photo1.jpg',
+					caption: 'Excepteur sint occaecat cupidatat non proident'
+				},
+				{
+					image: 'nature-photo2.jpg',
+					caption: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore.'
+				},
+				{
+					image: 'nature-photo3.jpg',
+					caption: 'Deserunt mollit anim id est laborum'
+				},
+				{
+					image: 'nature-photo4.jpg',
+					caption: 'Laboris nisi ut aliquip ex ea commodo consequat'
+				}
+			];
+			
+			// option 2
+			// var slides = $$('#blinds img');
+
+			$('blinds').floom(slides, {
+				slidesBase: 'slides/',
+				sliceFxIn: {
+					top: 20
+				}
+			});
+			
+		});
+	</script>
+	
+	<link rel="stylesheet" href="screen.css" type="text/css" media="screen" charset="utf-8" />
+	<link rel="stylesheet" href="floom/floom.css" type="text/css" media="screen" charset="utf-8" />
+
+	<title>Floom 1.0</title>
+	
+</head>
+
+<body>
+		
+	<div id="blinds-cont">
+		<div id="blinds">
+			<!-- <img title="Lorem ipsum dolor sit amet, consectetur adipisicing elit" alt="" src="nature-photo0.jpg" />
+			<img title="Lorem ipsum dolor sit amet, consectetur adipisicing elit" alt="" src="nature-photo1.jpg" />
+			<img title="Lorem ipsum dolor sit amet, consectetur adipisicing elit" alt="" src="nature-photo2.jpg" />
+			<img title="Lorem ipsum dolor sit amet, consectetur adipisicing elit" alt="" src="nature-photo3.jpg" />
+			<img title="Lorem ipsum dolor sit amet, consectetur adipisicing elit" alt="" src="nature-photo4.jpg" /> -->
+		</div>
+	</div>
+	
+
+</body>
+</html>

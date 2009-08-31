@@ -1,0 +1,266 @@
+/*
+Script: Floom.js
+	Floom - MooTools-based blinds slideshow
+
+Version: 
+	1.0
+
+License:
+	MIT-style license.
+
+Copyright:
+	Copyright (c) 2009 [Oskar Krawczyk](http://nouincolor.com/).
+
+Dependencies:
+	- MooTools-core 1.2.1 or higher [mootools-core.js](http://www.mootools.net/core/)
+	- MooTools-more 1.2.2.1 or higher [mootools-more.js](http://www.mootools.net/more/)
+*/
+
+var Floom = new Class({
+	
+	Implements: [Events, Options],
+		
+	options: {
+		prefix: 		'floom_',
+		amount: 		24,
+		animation: 		70,
+		interval: 		8000,
+		axis: 			'vertical',
+		progressbar: 	true,
+		captions: 		true,
+		captionsFxOut: 	$empty,
+		captionsFxIn: 	$empty,
+		slidesBase: 	$empty,
+		sliceFxIn: 		$empty,
+		onSlideChange: 	$empty,
+		onPreload: 		$empty
+	},
+	
+	initialize: function(wrapper, slides, options){
+		this.setOptions(options);
+		
+		wrapper = $(wrapper);
+		this.slides = this.driver(slides);
+		
+		this.wrapper = {
+			el: 	wrapper,
+			width: 	wrapper.getSize().x,
+			height: wrapper.getSize().y
+		};
+						
+		this.slices = {
+			els: [],
+			width: (this.options.axis == 'vertical' ? this.wrapper.width / this.options.amount : this.wrapper.width).toInt(),
+			height: (this.options.axis == 'vertical' ? this.wrapper.height : this.wrapper.height / this.options.amount).toInt()
+		};
+		
+		this.current = {
+			slide: 0,
+			overlay: 0,
+			counter: 0
+		};
+		
+		this.preloadImgs = [];
+		
+		this.createStructure();		
+	},
+	
+	driver: function(slides){		
+		// build the options object from a set of elements
+		if ($type(slides[0]).contains('element')) {			
+			this.slidesEl = [];
+			
+			// assign caption and the filename/url
+			slides.each(function(slide){
+				this.slidesEl.push({
+					image: slide.get('src'),
+					caption: slide.get('title')
+				});
+			}, this);
+			
+			// remove redundant elements
+			slides.destroy().empty();
+			
+			// assign the new object
+			slides = this.slidesEl;			
+		}
+		
+		return slides;
+	},
+		
+	horizontal: function(){
+		return {
+			'background-position': '0 -' + (this.slices.height * this.current.counter) + 'px'
+		};	
+	},
+
+	vertical: function(){
+		return {
+			'background-position': '-' + (this.slices.width * this.current.counter) + 'px 0'
+		};
+	},
+
+	createProgressbar: function(){
+		this.progressbar = new Element('div', {
+			'class': this.options.prefix + 'progressbar',
+			'morph': {
+				'duration': this.options.interval - (this.options.animation * this.options.amount),
+				'transition': 'linear'
+			}
+		});
+		
+		this.progressbar.inject(this.wrapper.el);
+	},
+	
+	createCaptions: function(){
+		this.captions = new Element('div', {
+			'class': this.options.prefix + 'caption',
+			'html': 'caption',
+			'styles': {
+				'opacity': 0
+			}
+		});
+		
+		this.captions.inject(this.wrapper.el);
+	},
+	
+	createStructure: function(){
+		this.container = new Element('div', {
+			'class': this.options.prefix + 'container',
+			'styles': {
+				'height': this.wrapper.height,
+				'width': this.wrapper.width
+			}
+		});
+				
+		this.container.inject(this.wrapper.el);
+		
+		// create the progress bar
+		if (this.options.progressbar) this.createProgressbar();
+		
+		// create the caption container
+		if (this.options.captions) this.createCaptions();
+				
+		// preload images and start up the slider
+		this.preload();
+	},
+	
+	createBlinds: function(idx){
+		
+		// update the global counter
+		this.current.counter = idx;
+		
+		// create the slices
+		this.slices.els[idx] = new Element('div', {
+			'class': this.options.prefix + 'slice ' + this.options.prefix + this.options.axis,
+			'tween': {
+				'duration': this.options.animation * 4
+			},
+			'styles': $merge({
+				'opacity': 0,
+				'width': this.slices.width,
+				'height': this.slices.height,
+				'background-image': 'url(' + this.options.slidesBase + this.slides[this.current.slide].image + ')'
+			}, this[this.options.axis]())
+		}).inject(this.container);
+		
+		// animate the slide
+		this.slices.els[idx].morph($merge({
+			'opacity': 1
+		}, this.options.sliceFxIn));
+
+		// move to the next slide
+		if (idx == this.options.amount-1) this.step.delay(this.options.animation, this);
+	},
+	
+	preload: function(){		
+		// build the images array
+		this.slides.each(function(o){
+			this.preloadImgs.push(this.options.slidesBase + o.image);
+		}, this);
+		
+		// preload all and activate when done
+		new Asset.images(this.preloadImgs, {
+			onComplete: this.onPreload.bind(this)
+		});
+	},
+	
+	onPreload: function(){
+		this.animateBlinds().periodical(this.options.interval, this);
+		
+		this.fireEvent('onPreload', this.slides[this.current.slide]);
+	},
+
+	animateBlinds: function(){
+		this.current.slide++;
+		
+		// go back to the first one when at the end
+		if (this.current.slide == this.slides.length-1) this.current.slide = 0;
+		
+		// create blinds
+		for (var idx = 0; idx < this.options.amount; idx++) {
+			this.createBlinds.delay(this.options.animation * idx, this, idx);
+		}
+		
+		// hide the progressbar when it reaches the end
+		if (this.options.progressbar) this.progressbar.fade('out');
+		
+		if (this.options.captions) {
+			
+			// apply the animation
+			this.captions.morph($merge({
+				'opacity': 0
+			}, this.options.captionsFxOut));
+		}
+		
+		return this.animateBlinds;
+	},
+	
+	step: function(){		
+		
+		// apply the image to the background
+		this.container.set('styles', {
+			'background-image': 'url(' + this.options.slidesBase + this.slides[this.current.slide].image + ')'
+		});
+		
+		// destory slices when animations finishes
+		this.slices.els.each(function(slice){
+			slice.destroy();
+		});
+
+		// prepeare and animate the progressbar
+		if (this.options.progressbar) {
+			
+			// calculate the width of the progressbar including margins
+			var calculatedWidth = this.container.getSize().x - (this.progressbar.getStyles('margin-left')['margin-left'].toInt() * 2);
+			
+			// animate the size
+			this.progressbar.morph({
+				'width': [0, calculatedWidth]
+			});
+			
+			// show the progressbar
+			this.progressbar.fade('in');			
+		}
+		
+		// update and animate the caption
+		if (this.options.captions) {
+			
+			// update the copy
+			this.captions.set('html', this.slides[this.current.slide].caption);
+			
+			// animate the caption
+			this.captions.morph($merge({
+				'opacity': 1
+			}, this.options.captionsFxIn));
+		}
+		
+		this.fireEvent('onSlideChange', this.slides[this.current.slide]);
+	}
+});
+
+Element.implement({
+	floom: function(slides, options){
+		return new Floom(this, slides, options);
+	}
+});
