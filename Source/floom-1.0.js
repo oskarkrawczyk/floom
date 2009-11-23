@@ -1,19 +1,14 @@
 /*
-Script: Floom.js
-	Floom - MooTools-based blinds slideshow
-
-Version: 
-	1.0
-
-License:
-	MIT-style license.
-
-Copyright:
-	Copyright (c) 2009 [Oskar Krawczyk](http://nouincolor.com/).
-
-Dependencies:
-	- MooTools-core 1.2.1 or higher [mootools-core.js](http://www.mootools.net/core/)
-	- MooTools-more 1.2.2.1 or higher [mootools-more.js](http://www.mootools.net/more/)
+---
+decription: Floom - MooTools-based blinds slideshow
+authors:
+ - Oskar Krawczyk (http://nouincolor.com/)
+requires:
+ core/1.2.3: '*'
+ more/1.2.3.1: '*'
+provides:
+ - Floom
+...
 */
 
 var Floom = new Class({
@@ -21,19 +16,19 @@ var Floom = new Class({
 	Implements: [Events, Options],
 		
 	options: {
-		prefix: 		'floom_',
-		amount: 		24,
-		animation: 		70,
-		interval: 		8000,
-		axis: 			'vertical',
+		prefix: 	'floom_',
+		amount: 	24,
+		animation: 	70,
+		interval: 	8000,
+		axis: 		'vertical',
 		progressbar: 	true,
-		captions: 		true,
+		captions: 	true,
 		captionsFxOut: 	$empty,
 		captionsFxIn: 	$empty,
 		slidesBase: 	$empty,
-		sliceFxIn: 		$empty,
+		sliceFxIn: 	$empty,
 		onSlideChange: 	$empty,
-		onPreload: 		$empty
+		onPreload: 	$empty
 	},
 	
 	initialize: function(wrapper, slides, options){
