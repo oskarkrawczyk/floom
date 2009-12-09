@@ -1,15 +1,17 @@
 /*
 ---
+script: floom-1.0.js
 decription: Floom - MooTools-based blinds slideshow
+license: MIT-style license.
 authors:
  - Oskar Krawczyk (http://nouincolor.com/)
 requires:
  core/1.2.3: '*'
  more/1.2.3.1: '*'
-provides:
- - Floom
+provides: [Floom]
 ...
 */
+
 
 var Floom = new Class({
 	
