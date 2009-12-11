@@ -5,9 +5,16 @@ decription: Floom - MooTools-based blinds slideshow
 license: MIT-style license.
 authors:
  - Oskar Krawczyk (http://nouincolor.com/)
-requires:
- core/1.2.3: '*'
- more/1.2.3.1: '*'
+requires: 
+  core:1.2.3: 
+  - Class.Extras
+  - Element.Event
+  - Element.Style
+  - Element.Dimensions
+  - Fx.Tween
+  - Fx.Morph
+  - String
+  - Array
 provides: [Floom]
 ...
 */
