@@ -3,7 +3,7 @@ Floom
 
 Floom is an extendible blinds-like slideshow widget for MooTools 1.2+.
 
-![Screenshot](http://nouincolor.com/floom/1.0/floom-1.0.png)
+![Screenshot](http://nouincolor.com/forge/banners/Floom.png)
 
 How to use
 ----------
