@@ -77,8 +77,8 @@ var Floom = new Class({
 			// assign caption and the filename/url
 			slides.each(function(slide){
 				this.slidesEl.push({
-					image: slide.get('src'),
-					caption: slide.get('title')
+					'image': slide.get('src'),
+					'caption': slide.get('title')
 				});
 			}, this);
 			
