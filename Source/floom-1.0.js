@@ -25,19 +25,19 @@ var Floom = new Class({
 	Implements: [Events, Options],
 		
 	options: {
-		prefix: 	'floom_',
-		amount: 	24,
-		animation: 	70,
-		interval: 	8000,
-		axis: 		'vertical',
-		progressbar: 	true,
-		captions: 	true,
-		captionsFxOut: 	$empty,
-		captionsFxIn: 	$empty,
-		slidesBase: 	$empty,
-		sliceFxIn: 	$empty,
-		onSlideChange: 	$empty,
-		onPreload: 	$empty
+		prefix: 'floom_',
+		amount: 24,
+		animation: 70,
+		interval: 8000,
+		axis: 'vertical',
+		progressbar: true,
+		captions: true,
+		captionsFxOut: $empty,
+		captionsFxIn: $empty,
+		slidesBase: $empty,
+		sliceFxIn: $empty,
+		onSlideChange: $empty,
+		onPreload: $empty
 	},
 	
 	initialize: function(wrapper, slides, options){
@@ -66,12 +66,12 @@ var Floom = new Class({
 		
 		this.preloadImgs = [];
 		
-		this.createStructure();		
+		this.createStructure();	
 	},
 	
-	driver: function(slides){		
+	driver: function(slides){
 		// build the options object from a set of elements
-		if ($type(slides[0]).contains('element')) {			
+		if ($type(slides[0]).contains('element')){
 			this.slidesEl = [];
 			
 			// assign caption and the filename/url
@@ -86,7 +86,7 @@ var Floom = new Class({
 			slides.destroy().empty();
 			
 			// assign the new object
-			slides = this.slidesEl;			
+			slides = this.slidesEl;	
 		}
 		
 		return slides;
@@ -202,14 +202,14 @@ var Floom = new Class({
 		if (this.current.slide == this.slides.length) this.current.slide = 0;
 		
 		// create blinds
-		for (var idx = 0; idx < this.options.amount; idx++) {
+		for (var idx = 0; idx < this.options.amount; idx++){
 			this.createBlinds.delay(this.options.animation * idx, this, idx);
 		}
 		
 		// hide the progressbar when it reaches the end
 		if (this.options.progressbar) this.progressbar.fade('out');
 		
-		if (this.options.captions) {
+		if (this.options.captions){
 			
 			// apply the animation
 			this.captions.morph($merge({
@@ -220,7 +220,7 @@ var Floom = new Class({
 		return this.animateBlinds;
 	},
 	
-	step: function(){		
+	step: function(){
 		
 		// apply the image to the background
 		this.container.set('styles', {
@@ -233,7 +233,7 @@ var Floom = new Class({
 		});
 
 		// prepeare and animate the progressbar
-		if (this.options.progressbar) {
+		if (this.options.progressbar){
 			
 			// calculate the width of the progressbar including margins
 			var calculatedWidth = this.container.getSize().x - (this.progressbar.getStyles('margin-left')['margin-left'].toInt() * 2);
@@ -244,11 +244,11 @@ var Floom = new Class({
 			});
 			
 			// show the progressbar
-			this.progressbar.fade('in');			
+			this.progressbar.fade('in');
 		}
 		
 		// update and animate the caption
-		if (this.options.captions) {
+		if (this.options.captions){
 			
 			// update the copy
 			this.captions.set('html', this.slides[this.current.slide].caption);
