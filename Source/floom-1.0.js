@@ -59,7 +59,7 @@ var Floom = new Class({
 		};
 		
 		this.current = {
-			slide: 0,
+			slide: -1,
 			overlay: 0,
 			counter: 0
 		};
@@ -199,7 +199,7 @@ var Floom = new Class({
 		this.current.slide++;
 		
 		// go back to the first one when at the end
-		if (this.current.slide == this.slides.length-1) this.current.slide = 0;
+		if (this.current.slide == this.slides.length) this.current.slide = 0;
 		
 		// create blinds
 		for (var idx = 0; idx < this.options.amount; idx++) {
