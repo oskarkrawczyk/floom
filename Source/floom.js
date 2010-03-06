@@ -1,12 +1,12 @@
 /*
 ---
-script: floom-1.0.js
+script: floom.js
 decription: Floom - MooTools-based blinds slideshow
 license: MIT-style license.
 authors:
  - Oskar Krawczyk (http://nouincolor.com/)
-requires: 
-  core:1.2.3: 
+requires:
+  core:1.2.2:
   - Class.Extras
   - Element.Event
   - Element.Style
@@ -36,20 +36,21 @@ var Floom = new Class({
 		captionsFxIn: $empty,
 		slidesBase: $empty,
 		sliceFxIn: $empty,
-		onSlideChange: $empty,
-		onPreload: $empty
+		onSlideChange: function(){},
+		onPreload: function(){}
 	},
 	
 	initialize: function(wrapper, slides, options){
 		this.setOptions(options);
 		
 		wrapper = $(wrapper);
+		
 		this.slides = this.driver(slides);
 		
 		this.wrapper = {
 			el: 	wrapper,
-			width: 	wrapper.getSize().x,
-			height: wrapper.getSize().y
+			width: 	$pick(parseInt(wrapper.getStyles('width')['width']), wrapper.getSize().x),
+			height: $pick(parseInt(wrapper.getStyles('height')['height']), wrapper.getSize().y)
 		};
 						
 		this.slices = {
@@ -140,10 +141,14 @@ var Floom = new Class({
 		this.container.inject(this.wrapper.el);
 		
 		// create the progress bar
-		if (this.options.progressbar) this.createProgressbar();
+		if (this.options.progressbar){
+			this.createProgressbar();
+		}
 		
 		// create the caption container
-		if (this.options.captions) this.createCaptions();
+		if (this.options.captions){
+			this.createCaptions();
+		}
 				
 		// preload images and start up the slider
 		this.preload();
@@ -169,12 +174,14 @@ var Floom = new Class({
 		}).inject(this.container);
 		
 		// animate the slide
-		this.slices.els[idx].morph($merge({
+		new Fx.Morph(this.slices.els[idx]).start($merge({
 			'opacity': 1
 		}, this.options.sliceFxIn));
 
 		// move to the next slide
-		if (idx == this.options.amount-1) this.step.delay(this.options.animation, this);
+		if (idx == this.options.amount-1){
+			this.step.delay(this.options.animation * 4, this);
+		}
 	},
 	
 	preload: function(){		
@@ -199,7 +206,9 @@ var Floom = new Class({
 		this.current.slide++;
 		
 		// go back to the first one when at the end
-		if (this.current.slide == this.slides.length) this.current.slide = 0;
+		if (this.current.slide == this.slides.length){
+			this.current.slide = 0;
+		}
 		
 		// create blinds
 		for (var idx = 0; idx < this.options.amount; idx++){
@@ -207,7 +216,9 @@ var Floom = new Class({
 		}
 		
 		// hide the progressbar when it reaches the end
-		if (this.options.progressbar) this.progressbar.fade('out');
+		if (this.options.progressbar){
+			this.progressbar.fade('out');
+		}
 		
 		if (this.options.captions){
 			
