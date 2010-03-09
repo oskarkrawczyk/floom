@@ -34,7 +34,7 @@ var Floom = new Class({
 		captions: true,
 		captionsFxOut: $empty,
 		captionsFxIn: $empty,
-		slidesBase: $empty,
+		slidesBase: '',
 		sliceFxIn: $empty,
 		onSlideChange: function(){},
 		onPreload: function(){}
