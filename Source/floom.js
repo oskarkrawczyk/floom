@@ -15,6 +15,7 @@ requires:
   - Fx.Morph
   - String
   - Array
+  - Assets
 provides: [Floom]
 ...
 */
