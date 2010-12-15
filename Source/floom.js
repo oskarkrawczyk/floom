@@ -6,7 +6,7 @@ license: MIT-style license.
 authors:
  - Oskar Krawczyk (http://nouincolor.com/)
 requires:
-  core:1.2.2:
+  core:1.3
   - Class.Extras
   - Element.Event
   - Element.Style
@@ -33,10 +33,10 @@ var Floom = new Class({
 		axis: 'vertical',
 		progressbar: true,
 		captions: true,
-		captionsFxOut: $empty,
-		captionsFxIn: $empty,
+		captionsFxOut: function(){},
+		captionsFxIn: function(){},
 		slidesBase: '',
-		sliceFxIn: $empty,
+		sliceFxIn: function(){},
 		onSlideChange: function(){},
 		onPreload: function(){}
 	},
@@ -44,38 +44,37 @@ var Floom = new Class({
 	initialize: function(wrapper, slides, options){
 		this.setOptions(options);
 		
-		wrapper = $(wrapper);
+		wrapper = document.id(wrapper);
 		
 		this.slides = this.driver(slides);
 		
 		this.wrapper = {
-			el: 	wrapper,
-			width: 	$pick(parseInt(wrapper.getStyles('width')['width']), wrapper.getSize().x),
-			height: $pick(parseInt(wrapper.getStyles('height')['height']), wrapper.getSize().y)
+			el: wrapper,
+			width: [parseInt(wrapper.getStyles('width')['width']), wrapper.getSize().x].pick(),
+			height: [parseInt(wrapper.getStyles('height')['height']), wrapper.getSize().y].pick()
 		};
-						
+
 		this.slices = {
 			els: [],
 			width: (this.options.axis == 'vertical' ? this.wrapper.width / this.options.amount : this.wrapper.width).toInt(),
 			height: (this.options.axis == 'vertical' ? this.wrapper.height : this.wrapper.height / this.options.amount).toInt()
 		};
-		
+
 		this.current = {
 			slide: -1,
 			overlay: 0,
 			counter: 0
 		};
-		
+
 		this.preloadImgs = [];
-		
 		this.createStructure();	
 	},
 	
 	driver: function(slides){
 		// build the options object from a set of elements
-		if ($type(slides[0]).contains('element')){
+		if (typeOf(slides[0]).contains('element')){
 			this.slidesEl = [];
-			
+
 			// assign caption and the filename/url
 			slides.each(function(slide){
 				this.slidesEl.push({
@@ -83,14 +82,14 @@ var Floom = new Class({
 					'caption': slide.get('title')
 				});
 			}, this);
-			
+
 			// remove redundant elements
 			slides.destroy().empty();
-			
+
 			// assign the new object
 			slides = this.slidesEl;	
 		}
-		
+
 		return slides;
 	},
 		
@@ -107,7 +106,7 @@ var Floom = new Class({
 	},
 
 	createProgressbar: function(){
-		this.progressbar = new Element('div', {
+		this.progressbar = Element('div', {
 			'class': this.options.prefix + 'progressbar',
 			'morph': {
 				'duration': this.options.interval - (this.options.animation * this.options.amount),
@@ -117,65 +116,65 @@ var Floom = new Class({
 		
 		this.progressbar.inject(this.wrapper.el);
 	},
-	
+
 	createCaptions: function(){
-		this.captions = new Element('div', {
+		this.captions = Element('div', {
 			'class': this.options.prefix + 'caption',
 			'html': 'caption',
 			'styles': {
 				'opacity': 0
 			}
 		});
-		
+
 		this.captions.inject(this.wrapper.el);
 	},
-	
+
 	createStructure: function(){
-		this.container = new Element('div', {
+		this.container = Element('div', {
 			'class': this.options.prefix + 'container',
 			'styles': {
 				'height': this.wrapper.height,
 				'width': this.wrapper.width
 			}
 		});
-				
+
 		this.container.inject(this.wrapper.el);
-		
+
 		// create the progress bar
 		if (this.options.progressbar){
 			this.createProgressbar();
 		}
-		
+
 		// create the caption container
 		if (this.options.captions){
 			this.createCaptions();
 		}
-				
+
 		// preload images and start up the slider
 		this.preload();
 	},
-	
+
 	createBlinds: function(idx){
-		
+
 		// update the global counter
 		this.current.counter = idx;
-		
+
 		// create the slices
-		this.slices.els[idx] = new Element('div', {
+		this.slices.els[idx] = Element('div', {
 			'class': this.options.prefix + 'slice ' + this.options.prefix + this.options.axis,
 			'tween': {
 				'duration': this.options.animation * 4
 			},
-			'styles': $merge({
+			'styles': Object.merge({
 				'opacity': 0,
 				'width': this.slices.width,
 				'height': this.slices.height,
 				'background-image': 'url(' + this.options.slidesBase + this.slides[this.current.slide].image + ')'
 			}, this[this.options.axis]())
 		}).inject(this.container);
-		
+
 		// animate the slide
-		new Fx.Morph(this.slices.els[idx]).start($merge({
+		new Fx.Morph(this.slices.els[idx]).start(Object.merge({
 			'opacity': 1
 		}, this.options.sliceFxIn));
 
@@ -184,13 +183,13 @@ var Floom = new Class({
 			this.step.delay(this.options.animation * 4, this);
 		}
 	},
-	
-	preload: function(){		
+
+	preload: function(){
 		// build the images array
 		this.slides.each(function(o){
 			this.preloadImgs.push(this.options.slidesBase + o.image);
 		}, this);
-		
+
 		// preload all and activate when done
 		new Asset.images(this.preloadImgs, {
 			onComplete: this.onPreload.bind(this)
@@ -199,46 +198,46 @@ var Floom = new Class({
 	
 	onPreload: function(){
 		this.animateBlinds().periodical(this.options.interval, this);
-		
+
 		this.fireEvent('onPreload', this.slides[this.current.slide]);
 	},
 
 	animateBlinds: function(){
 		this.current.slide++;
-		
+
 		// go back to the first one when at the end
 		if (this.current.slide == this.slides.length){
 			this.current.slide = 0;
 		}
-		
+
 		// create blinds
 		for (var idx = 0; idx < this.options.amount; idx++){
 			this.createBlinds.delay(this.options.animation * idx, this, idx);
 		}
-		
+
 		// hide the progressbar when it reaches the end
 		if (this.options.progressbar){
 			this.progressbar.fade('out');
 		}
-		
+
 		if (this.options.captions){
-			
+
 			// apply the animation
-			this.captions.morph($merge({
+			this.captions.morph(Object.merge({
 				'opacity': 0
 			}, this.options.captionsFxOut));
 		}
-		
+
 		return this.animateBlinds;
 	},
-	
+
 	step: function(){
-		
+
 		// apply the image to the background
 		this.container.set('styles', {
 			'background-image': 'url(' + this.options.slidesBase + this.slides[this.current.slide].image + ')'
 		});
-		
+
 		// destory slices when animations finishes
 		this.slices.els.each(function(slice){
 			slice.destroy();
@@ -246,27 +245,27 @@ var Floom = new Class({
 
 		// prepeare and animate the progressbar
 		if (this.options.progressbar){
-			
+
 			// calculate the width of the progressbar including margins
 			var calculatedWidth = this.container.getSize().x - (this.progressbar.getStyles('margin-left')['margin-left'].toInt() * 2);
-			
+
 			// animate the size
 			this.progressbar.morph({
 				'width': [0, calculatedWidth]
 			});
-			
+
 			// show the progressbar
 			this.progressbar.fade('in');
 		}
 		
 		// update and animate the caption
 		if (this.options.captions){
-			
+
 			// update the copy
 			this.captions.set('html', this.slides[this.current.slide].caption);
-			
+
 			// animate the caption
-			this.captions.morph($merge({
+			this.captions.morph(Object.merge({
 				'opacity': 1
 			}, this.options.captionsFxIn));
 		}

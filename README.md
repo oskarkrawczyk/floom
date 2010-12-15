@@ -54,6 +54,10 @@ Options
 
 All options have default values assigned, hence are optional.
 
+### Version 1.3
+
+* Works with MooTools 1.3
+
 ### Version 1.1
 
 * Bugfixes
