@@ -8,12 +8,12 @@
 	<link rel="stylesheet" href="screen.css" type="text/css" media="screen" charset="utf-8" />
 	<link rel="stylesheet" href="floom/floom.css" type="text/css" media="screen" charset="utf-8" />
 
-	<script type="text/javascript" charset="utf-8" src="mootools-1.2.2-core.js"></script>
-	<script type="text/javascript" charset="utf-8" src="mootools-1.2.2.2-more.js"></script>
+	<script type="text/javascript" charset="utf-8" src="mootools-core-1.3-full-nocompat.js"></script>
+	<script type="text/javascript" charset="utf-8" src="mootools-more.js"></script>
 	<script type="text/javascript" charset="utf-8" src="../Source/floom.js"></script>
 	
 	<script type="text/javascript" charset="utf-8">
-		window.addEvent('domready', function(e){	
+		window.addEvent('domready', function(e){
 			
 			// option 1		
 			var slides = [
@@ -45,14 +45,14 @@
 			$('blinds').floom(slides, {
 				slidesBase: 'slides/',
 				sliceFxIn: {
-					top: 20
+					left: [20, 0]
 				}
 			});
 			
 		});
 	</script>
 	
-	<title>Floom 1.0</title>
+	<title>Floom 1.3</title>
 	
 </head>
 
@@ -60,11 +60,6 @@
 		
 	<div id="blinds-cont">
 		<div id="blinds">
-			<!-- <img title="Lorem ipsum dolor sit amet, consectetur adipisicing elit" alt="" src="nature-photo0.jpg" />
-			<img title="Lorem ipsum dolor sit amet, consectetur adipisicing elit" alt="" src="nature-photo1.jpg" />
-			<img title="Lorem ipsum dolor sit amet, consectetur adipisicing elit" alt="" src="nature-photo2.jpg" />
-			<img title="Lorem ipsum dolor sit amet, consectetur adipisicing elit" alt="" src="nature-photo3.jpg" />
-			<img title="Lorem ipsum dolor sit amet, consectetur adipisicing elit" alt="" src="nature-photo4.jpg" /> -->
 		</div>
 	</div>
 	

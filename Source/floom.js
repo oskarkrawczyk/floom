@@ -33,10 +33,10 @@ var Floom = new Class({
 		axis: 'vertical',
 		progressbar: true,
 		captions: true,
-		captionsFxOut: function(){},
-		captionsFxIn: function(){},
+		captionsFxOut: {},
+		captionsFxIn: {},
 		slidesBase: '',
-		sliceFxIn: function(){},
+		sliceFxIn: {},
 		onSlideChange: function(){},
 		onPreload: function(){}
 	},
@@ -95,13 +95,13 @@ var Floom = new Class({
 		
 	horizontal: function(){
 		return {
-			'background-position': '0 -' + (this.slices.height * this.current.counter) + 'px'
+		'background-position': [0, -(this.slices.height * this.current.counter)]
 		};	
 	},
 
 	vertical: function(){
 		return {
-			'background-position': '-' + (this.slices.width * this.current.counter) + 'px 0'
+			'background-position': [-(this.slices.width * this.current.counter), 0]
 		};
 	},
 
@@ -162,7 +162,7 @@ var Floom = new Class({
 		// create the slices
 		this.slices.els[idx] = Element('div', {
 			'class': this.options.prefix + 'slice ' + this.options.prefix + this.options.axis,
-			'tween': {
+			'morph': {
 				'duration': this.options.animation * 4
 			},
 			'styles': Object.merge({
