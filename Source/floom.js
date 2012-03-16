@@ -174,9 +174,8 @@ var Floom = new Class({
 		}).inject(this.container);
 
 		// animate the slide
-		new Fx.Morph(this.slices.els[idx]).start(Object.merge({
-			'opacity': 1
-		}, this.options.sliceFxIn));
+		var ieDegradation= Browser.ie? {}: Object.merge({'opacity': 1}, this.options.sliceFxIn);
+		new Fx.Morph(this.slices.els[idx]).start(ieDegradation);
 
 		// move to the next slide
 		if (idx == this.options.amount-1){
