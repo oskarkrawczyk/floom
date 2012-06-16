@@ -130,12 +130,15 @@ var Floom = new Class({
 	},
 
 	createStructure: function(){
-		this.container = Element('div', {
+		this.container = Element('a', {
 			'class': this.options.prefix + 'container',
 			'styles': {
 				'height': this.wrapper.height,
-				'width': this.wrapper.width
-			}
+				'width': this.wrapper.width,
+				'display': 'block'
+			},
+			'href': this.slides[0].href,
+			'target': '_blank'
 		});
 
 		this.container.inject(this.wrapper.el);
@@ -236,6 +239,11 @@ var Floom = new Class({
 		this.container.set('styles', {
 			'background-image': 'url(' + this.options.slidesBase + this.slides[this.current.slide].image + ')'
 		});
+//		console.log(this.slides[this.current.slide].href);
+		//修改当前 slide 链接
+ 		if(!!this.slides[this.current.slide].href){
+			this.container.set('href', this.slides[this.current.slide].href);
+		}
 
 		// destory slices when animations finishes
 		this.slices.els.each(function(slice){
