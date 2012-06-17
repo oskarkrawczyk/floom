@@ -239,8 +239,7 @@ var Floom = new Class({
 		this.container.set('styles', {
 			'background-image': 'url(' + this.options.slidesBase + this.slides[this.current.slide].image + ')'
 		});
-//		console.log(this.slides[this.current.slide].href);
-		//修改当前 slide 链接
+
  		if(!!this.slides[this.current.slide].href){
 			this.container.set('href', this.slides[this.current.slide].href);
 		}
