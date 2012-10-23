@@ -1,0 +1,8 @@
+{
+  "name": "Floom",
+  "version": "1.3",
+  "main": "./Source/floom.js",
+  "dependencies": {
+    "mootools": "~1.3"
+  }
+}
