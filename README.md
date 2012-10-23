@@ -1,9 +1,7 @@
 Floom
 =====
 
-Floom is an extendible blinds-like slideshow widget for MooTools 1.3+.
-
-![Screenshot](http://nouincolor.com/forge/banners/Floom.png)
+Floom is an extendible blinds-like slideshow widget for MooTools.
 
 How to use
 ----------
